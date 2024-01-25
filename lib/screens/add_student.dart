@@ -1,0 +1,181 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:database_practice/model/student_database_model.dart';
+import 'package:database_practice/screens/common_widgets/text_field_common_widget.dart';
+import 'package:database_practice/screens/common_widgets/text_widget_common.dart';
+import 'package:database_practice/services/db_servicer.dart';
+import 'package:database_practice/utils/colors.dart';
+import 'package:database_practice/utils/height_width.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+
+class AddStudent extends StatefulWidget {
+  AddStudent({
+    super.key,
+  });
+
+  @override
+  State<AddStudent> createState() => _AddStudentState();
+}
+
+class _AddStudentState extends State<AddStudent> {
+  var _nameController = TextEditingController();
+  var _ageController = TextEditingController();
+  var _placeController = TextEditingController();
+  var _standardController = TextEditingController();
+  StudentDataBaseModel studentModel = StudentDataBaseModel();
+
+  bool _namevalidate = true;
+  bool _agevalidate = true;
+  bool _placevalidate = true;
+  bool _standardvalidate = true;
+  var _dbServicer = DbServicer();
+  File? studentImage;
+  String? studentProfileImage;
+  String? base64String;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const TextWidgetCommon(
+          text: "Student Record",
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+          fontSize: 23,
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+          child: Column(
+            children: [
+              CircleAvatar(
+                backgroundColor: const Color.fromARGB(255, 214, 255, 251),
+                radius: 60,
+                backgroundImage: studentImage!=null ?Image.file(studentImage!).image:null,
+                child: Center(
+                  child: studentImage != null ? null : 
+                  IconButton(
+                    onPressed: () async {
+                      final pickedImage = await ImagePicker()
+                          .pickImage(source: ImageSource.gallery);
+                      if (pickedImage != null) {
+                        setState(() {
+                          studentImage = File(pickedImage.path);
+                        });
+                        List<int> imageBytes =
+                            await studentImage!.readAsBytes();
+                         base64String = base64Encode(imageBytes);
+                       // studentModel.profileImage = base64String;
+                      }
+                    },
+                    icon: Icon(
+                      Icons.camera_alt_outlined,
+                      size: 35,
+                      color: kBlack,
+                    ),
+                  ),
+                ),
+              ),
+              TextWidgetCommon(
+                text: "Add New Student",
+                color: kBlack,
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+              ),
+              kHeight15,
+              TextFieldCommonWidget(
+                errorText: !_namevalidate ? "Name can't be Empty" : null,
+                keyboardType: TextInputType.text,
+                nameController: _nameController,
+                hintText: "Name",
+                labelText: "Enter name",
+              ),
+              kHeight15,
+              TextFieldCommonWidget(
+                errorText: !_agevalidate ? "Age can't be Empty" : null,
+                keyboardType: TextInputType.text,
+                nameController: _ageController,
+                hintText: "Age",
+                labelText: "Enter age",
+              ),
+              kHeight15,
+              TextFieldCommonWidget(
+                errorText: !_placevalidate ? "Place can't be Empty" : null,
+                keyboardType: TextInputType.text,
+                nameController: _placeController,
+                hintText: "Place",
+                labelText: "Enter place",
+              ),
+              kHeight15,
+              TextFieldCommonWidget(
+                errorText: !_standardvalidate ? "Class can't be Empty" : null,
+                keyboardType: TextInputType.text,
+                nameController: _standardController,
+                hintText: "Class",
+                labelText: "Enter class",
+              ),
+              kHeight15,
+              Row(
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(backgroundColor: kBlack),
+                    onPressed: () async {
+                      setState(() {
+                        _nameController.text.isEmpty
+                            ? _namevalidate = false
+                            : _namevalidate = true;
+                        _ageController.text.isEmpty
+                            ? _agevalidate = false
+                            : _agevalidate = true;
+                        _placeController.text.isEmpty
+                            ? _placevalidate = false
+                            : _placevalidate = true;
+                        _standardController.text.isEmpty
+                            ? _standardvalidate = false
+                            : _standardvalidate = true;
+                      });
+
+                      if (_namevalidate &&
+                          _agevalidate &&
+                          _placevalidate &&
+                          _standardvalidate) {
+                        var _student = StudentDataBaseModel();
+                        //_student.profileImage = base64String;
+                        _student.name = _nameController.text;
+                        _student.age = _ageController.text;
+                        _student.place = _placeController.text;
+                        _student.standard = _standardController.text;
+                        var result = await _dbServicer.addStudentToDB(_student);
+                        Navigator.pop(context, result);
+                      }
+                    },
+                    child: TextWidgetCommon(
+                      text: "Save",
+                      color: kWhite,
+                    ),
+                  ),
+                  kWidth15,
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(backgroundColor: kBlack),
+                    onPressed: () {
+                      _nameController.text = '';
+                      _ageController.text = '';
+                      _placeController.text = '';
+                      _standardController.text = '';
+                    },
+                    child: TextWidgetCommon(
+                      text: "Clear",
+                      color: kWhite,
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
