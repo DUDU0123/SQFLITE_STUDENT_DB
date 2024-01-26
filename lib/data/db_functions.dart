@@ -1,4 +1,5 @@
 import 'package:database_practice/data/database_creation.dart';
+import 'package:database_practice/model/student_database_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DbFunctions {
@@ -28,9 +29,9 @@ class DbFunctions {
     return await db?.query(table);
   }
 
-  getDataFromDBbyId(table, userId) async {
+  getDataFromDBbyId(table, StudentDataBaseModel student) async {
     var db = await database;
-    return await db?.query(table, where: 'id = ?', whereArgs: [userId]);
+    return await db?.query(table, where: 'id = ?', whereArgs: [student.id]);
   }
 
   updateOneUserInDB(table, data) async {

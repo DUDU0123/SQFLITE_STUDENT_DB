@@ -103,6 +103,27 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  void studentFilteringOnSearch(String searchedWord) {
+    List<StudentDataBaseModel> results = [];
+    if (searchedWord.isEmpty) {
+      setState(() {
+        getAllStudentDetails();
+      });
+    } else {
+      results = _studentDataList
+          .where(
+            (student) => student.name!.toLowerCase().contains(
+                  searchedWord.toLowerCase(),
+                ),
+          )
+          .toList();
+    }
+
+    setState(() {
+      _studentDataList = results;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,6 +154,9 @@ class _HomePageState extends State<HomePage> {
                 Expanded(
                   flex: 5,
                   child: TextField(
+                    onChanged: (searchedWord) {
+                      studentFilteringOnSearch(searchedWord);
+                    },
                     controller: searchValueController,
                     style: TextStyle(
                       color: kBlack,
@@ -165,10 +189,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Expanded(
                   child: IconButton(
-                    onPressed: () async {
-                      // final searchValue = searchValueController.text;
-                      // await _dbService.getOneStudentFromDbList();
-                    },
+                    onPressed: () async {},
                     icon: Icon(
                       Icons.search,
                       color: kBlack,
@@ -180,73 +201,87 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      body: ListView.separated(
-        itemCount: _studentDataList.length,
-        separatorBuilder: (context, index) => kHeight10,
-        padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 20),
-        itemBuilder: (context, index) => Container(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          decoration: BoxDecoration(
-              color: kBlue.withOpacity(0.5),
-              borderRadius: BorderRadius.circular(10)),
-          child: ListTile(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) =>
-                      StudentProfilePage(studentModel: _studentDataList[index]),
-                ),
-              );
-            },
-            leading:  CircleAvatar(
-              radius: 50,
-              backgroundImage:_studentDataList[index].profileImage!=null? AssetImage(_studentDataList[index].profileImage!):null,
-            ),
-            title: TextWidgetCommon(
-              overflow: TextOverflow.ellipsis,
-              text: _studentDataList[index].name ?? '',
-              color: Colors.black,
-              fontSize: 20,
-            ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .push(
+      body: _studentDataList.isEmpty
+          ? Center(
+              child: TextWidgetCommon(
+                text: "No student available",
+                color: kBlack,
+                fontWeight: FontWeight.w500,
+                fontSize: 20,
+              ),
+            )
+          : ListView.separated(
+              itemCount: _studentDataList.length,
+              separatorBuilder: (context, index) => kHeight10,
+              padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 20),
+              itemBuilder: (context, index) => Container(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                decoration: BoxDecoration(
+                    color: kBlue.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(10)),
+                child: ListTile(
+                  onTap: () {
+                    Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => EditStudentProfilePage(
+                        builder: (context) => StudentProfilePage(
                             studentModel: _studentDataList[index]),
                       ),
-                    )
-                        .then((value) {
-                      if (value != null) {
-                        getAllStudentDetails();
-                        showSnackbarAfterDataFetch("Data Successfully Saved");
-                      }
-                    });
-                    ;
+                    );
                   },
-                  icon: Icon(
-                    Icons.edit,
-                    color: kBlack,
+                  leading: CircleAvatar(
+                    radius: 50,
+                    backgroundImage:
+                        _studentDataList[index].profileImage != null
+                            ? AssetImage(_studentDataList[index].profileImage!)
+                            : null,
+                  ),
+                  title: TextWidgetCommon(
+                    overflow: TextOverflow.ellipsis,
+                    text: _studentDataList[index].name ?? '',
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                              .push(
+                            MaterialPageRoute(
+                              builder: (context) => EditStudentProfilePage(
+                                  studentModel: _studentDataList[index]),
+                            ),
+                          )
+                              .then((value) {
+                            if (value != null) {
+                              getAllStudentDetails();
+                              showSnackbarAfterDataFetch(
+                                  "Data Successfully Saved");
+                            }
+                          });
+                          ;
+                        },
+                        icon: Icon(
+                          Icons.edit,
+                          color: kBlack,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          deleteAlertDialog(
+                              context, _studentDataList[index].id);
+                        },
+                        icon: Icon(
+                          Icons.delete_outline,
+                          color: kBlack,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                IconButton(
-                  onPressed: () {
-                    deleteAlertDialog(context, _studentDataList[index].id);
-                  },
-                  icon: Icon(
-                    Icons.delete_outline,
-                    color: kBlack,
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: kBlack,
         onPressed: () {

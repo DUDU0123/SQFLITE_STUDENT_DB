@@ -7,7 +7,7 @@ import 'package:database_practice/utils/height_width.dart';
 import 'package:flutter/material.dart';
 
 class EditStudentProfilePage extends StatefulWidget {
-  EditStudentProfilePage({super.key, required this.studentModel});
+  const EditStudentProfilePage({super.key, required this.studentModel});
   final StudentDataBaseModel studentModel;
 
   @override
