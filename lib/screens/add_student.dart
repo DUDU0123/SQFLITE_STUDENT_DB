@@ -95,7 +95,7 @@ class _AddStudentState extends State<AddStudent> {
               kHeight15,
               TextFieldCommonWidget(
                 errorText: !_agevalidate ? "Age can't be Empty" : null,
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.number,
                 nameController: _ageController,
                 hintText: "Age",
                 labelText: "Enter age",

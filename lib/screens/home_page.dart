@@ -103,6 +103,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  //filtering function
   void studentFilteringOnSearch(String searchedWord) {
     List<StudentDataBaseModel> results = [];
     if (searchedWord.isEmpty) {
@@ -118,7 +119,6 @@ class _HomePageState extends State<HomePage> {
           )
           .toList();
     }
-
     setState(() {
       _studentDataList = results;
     });
@@ -148,7 +148,7 @@ class _HomePageState extends State<HomePage> {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: Color.fromARGB(217, 249, 249, 249)),
+                color:const Color.fromARGB(217, 249, 249, 249)),
             child: Row(
               children: [
                 Expanded(
@@ -164,6 +164,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                     cursorColor: kBlack,
                     decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.only(top: 10),
+                      hintText: 'Search',
                       border: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: kTransparent,
@@ -187,15 +189,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                Expanded(
-                  child: IconButton(
-                    onPressed: () async {},
-                    icon: Icon(
-                      Icons.search,
-                      color: kBlack,
-                    ),
-                  ),
-                )
               ],
             ),
           ),
