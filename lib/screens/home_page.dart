@@ -149,47 +149,40 @@ class _HomePageState extends State<HomePage> {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color:const Color.fromARGB(217, 249, 249, 249)),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 5,
-                  child: TextField(
-                    onChanged: (searchedWord) {
-                      studentFilteringOnSearch(searchedWord);
-                    },
-                    controller: searchValueController,
-                    style: TextStyle(
-                      color: kBlack,
-                      fontSize: 21,
-                    ),
-                    cursorColor: kBlack,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.only(top: 10),
-                      hintText: 'Search',
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: kTransparent,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: kTransparent,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: kTransparent,
-                        ),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: kTransparent,
-                        ),
-                      ),
-                    ),
+            child: TextField(
+              onChanged: (searchedWord) {
+                studentFilteringOnSearch(searchedWord);
+              },
+              controller: searchValueController,
+              style: TextStyle(
+                color: kBlack,
+                fontSize: 21,
+              ),
+              cursorColor: kBlack,
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.only(top: 10),
+                hintText: 'Search',
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: kTransparent,
                   ),
                 ),
-              ],
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: kTransparent,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: kTransparent,
+                  ),
+                ),
+                disabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: kTransparent,
+                  ),
+                ),
+              ),
             ),
           ),
         ),

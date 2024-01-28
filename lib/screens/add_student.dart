@@ -53,29 +53,32 @@ class _AddStudentState extends State<AddStudent> {
               CircleAvatar(
                 backgroundColor: const Color.fromARGB(255, 214, 255, 251),
                 radius: 60,
-                backgroundImage: studentImage!=null ?Image.file(studentImage!).image:null,
+                backgroundImage: studentImage != null
+                    ? Image.file(studentImage!).image
+                    : null,
                 child: Center(
-                  child: studentImage != null ? null : 
-                  IconButton(
-                    onPressed: () async {
-                      final pickedImage = await ImagePicker()
-                          .pickImage(source: ImageSource.gallery);
-                      if (pickedImage != null) {
-                        setState(() {
-                          studentImage = File(pickedImage.path);
-                        });
-                        List<int> imageBytes =
-                            await studentImage!.readAsBytes();
-                         base64String = base64Encode(imageBytes);
-                       // studentModel.profileImage = base64String;
-                      }
-                    },
-                    icon: Icon(
-                      Icons.camera_alt_outlined,
-                      size: 35,
-                      color: kBlack,
-                    ),
-                  ),
+                  child: studentImage != null
+                      ? null
+                      : IconButton(
+                          onPressed: () async {
+                            final pickedImage = await ImagePicker()
+                                .pickImage(source: ImageSource.gallery);
+                            if (pickedImage != null) {
+                              setState(() {
+                                studentImage = File(pickedImage.path);
+                              });
+                              List<int> imageBytes =
+                                  await studentImage!.readAsBytes();
+                              base64String = base64Encode(imageBytes);
+                              // studentModel.profileImage = base64String;
+                            }
+                          },
+                          icon: Icon(
+                            Icons.camera_alt_outlined,
+                            size: 35,
+                            color: kBlack,
+                          ),
+                        ),
                 ),
               ),
               TextWidgetCommon(
@@ -136,11 +139,16 @@ class _AddStudentState extends State<AddStudent> {
                             ? _standardvalidate = false
                             : _standardvalidate = true;
                       });
-
+                      RegExp regExp =
+                          RegExp(r"^(0?[1-9]|[1-9][0-9]|[1][01][0-9]|120)$");
+                      RegExp stringRegExp = RegExp(r"^[^0-9,]*$");
                       if (_namevalidate &&
                           _agevalidate &&
                           _placevalidate &&
-                          _standardvalidate) {
+                          _standardvalidate &&
+                          regExp.hasMatch(_ageController.text) &&
+                          stringRegExp.hasMatch(_nameController.text) &&
+                          stringRegExp.hasMatch(_placeController.text)) {
                         var _student = StudentDataBaseModel();
                         //_student.profileImage = base64String;
                         _student.name = _nameController.text;
@@ -149,6 +157,18 @@ class _AddStudentState extends State<AddStudent> {
                         _student.standard = _standardController.text;
                         var result = await _dbServicer.addStudentToDB(_student);
                         Navigator.pop(context, result);
+                      }else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            duration: const Duration(
+                              seconds: 2,
+                            ),
+                            content: TextWidgetCommon(
+                              color: kWhite,
+                              text: "Fill all fields correctly",
+                            ),
+                          ),
+                        );
                       }
                     },
                     child: TextWidgetCommon(

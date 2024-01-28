@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:database_practice/model/student_database_model.dart';
 import 'package:database_practice/screens/common_widgets/text_field_common_widget.dart';
 import 'package:database_practice/screens/common_widgets/text_widget_common.dart';
@@ -5,6 +8,7 @@ import 'package:database_practice/services/db_servicer.dart';
 import 'package:database_practice/utils/colors.dart';
 import 'package:database_practice/utils/height_width.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditStudentProfilePage extends StatefulWidget {
   const EditStudentProfilePage({super.key, required this.studentModel});
@@ -37,6 +41,9 @@ class _EditStudentProfilePageState extends State<EditStudentProfilePage> {
     super.initState();
   }
 
+  File? studentImage;
+  String? studentProfileImage;
+  String? base64String;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,8 +60,35 @@ class _EditStudentProfilePageState extends State<EditStudentProfilePage> {
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
           child: Column(
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 60,
+                backgroundImage: studentImage != null
+                    ? Image.file(studentImage!).image
+                    : null,
+                child: Center(
+                  child: studentImage != null
+                      ? null
+                      : IconButton(
+                          onPressed: () async {
+                            final pickedImage = await ImagePicker()
+                                .pickImage(source: ImageSource.gallery);
+                            if (pickedImage != null) {
+                              setState(() {
+                                studentImage = File(pickedImage.path);
+                              });
+                              List<int> imageBytes =
+                                  await studentImage!.readAsBytes();
+                              base64String = base64Encode(imageBytes);
+                              // studentModel.profileImage = base64String;
+                            }
+                          },
+                          icon: Icon(
+                            Icons.camera_alt_outlined,
+                            size: 35,
+                            color: kBlack,
+                          ),
+                        ),
+                ),
               ),
               TextWidgetCommon(
                 text: "Edit Student Details",
@@ -115,19 +149,39 @@ class _EditStudentProfilePageState extends State<EditStudentProfilePage> {
                             : _standardvalidate = true;
                       });
 
+                      RegExp regExp =
+                          RegExp(r"^(0?[1-9]|[1-9][0-9]|[1][01][0-9]|120)$");
+                      RegExp stringRegExp = RegExp(r"^[^0-9,]*$");
                       if (_namevalidate &&
                           _agevalidate &&
                           _placevalidate &&
-                          _standardvalidate) {
+                          _standardvalidate &&
+                          regExp.hasMatch(_ageController.text) &&
+                          stringRegExp.hasMatch(_nameController.text) &&
+                          stringRegExp.hasMatch(_placeController.text)) {
                         var _student = StudentDataBaseModel();
-                        _student.profileImage = widget.studentModel.profileImage;
+                        _student.profileImage =
+                            widget.studentModel.profileImage;
                         _student.id = widget.studentModel.id;
                         _student.name = _nameController.text;
                         _student.age = _ageController.text;
                         _student.place = _placeController.text;
                         _student.standard = _standardController.text;
-                        var result = await _dbServicer.updateStudentData(_student);
+                        var result =
+                            await _dbServicer.updateStudentData(_student);
                         Navigator.pop(context, result);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            duration: const Duration(
+                              seconds: 2,
+                            ),
+                            content: TextWidgetCommon(
+                              color: kWhite,
+                              text: "Fill all fields correctly",
+                            ),
+                          ),
+                        );
                       }
                     },
                     child: TextWidgetCommon(

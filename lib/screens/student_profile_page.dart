@@ -33,25 +33,21 @@ class StudentProfilePage extends StatelessWidget {
             kHeight25,
             StudentDataRowWidget(
               fieldName: "Name",
-              studentModel: studentModel,
               text: studentModel.name ?? '',
             ),
             kHeight15,
             StudentDataRowWidget(
               fieldName: "Age",
-              studentModel: studentModel,
               text: studentModel.age ?? '',
             ),
             kHeight15,
             StudentDataRowWidget(
               fieldName: "Place",
-              studentModel: studentModel,
               text: studentModel.place ?? '',
             ),
             kHeight15,
             StudentDataRowWidget(
               fieldName: "Class",
-              studentModel: studentModel,
               text: studentModel.standard ?? '',
             ),
           ],
@@ -64,12 +60,10 @@ class StudentProfilePage extends StatelessWidget {
 class StudentDataRowWidget extends StatelessWidget {
   const StudentDataRowWidget({
     super.key,
-    required this.studentModel,
     required this.text,
     required this.fieldName,
   });
 
-  final StudentDataBaseModel studentModel;
   final String text;
   final String fieldName;
 
