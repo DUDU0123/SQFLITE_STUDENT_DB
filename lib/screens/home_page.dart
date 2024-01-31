@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:database_practice/model/student_database_model.dart';
 import 'package:database_practice/screens/add_student.dart';
 import 'package:database_practice/screens/common_widgets/text_widget_common.dart';
@@ -31,7 +34,18 @@ class _HomePageState extends State<HomePage> {
         studentModel.age = student['age'];
         studentModel.place = student['place'];
         studentModel.standard = student['standard'];
-        studentModel.profileImage = student['profileimage'];
+       
+        try {
+          Uint8List? imageBytes = student['profileimage'];
+
+          if (imageBytes != null) {
+            studentModel.profileimage = imageBytes;
+          }
+        } catch (e) {
+          // Handle decoding error
+          print('Error decoding profile image: $e');
+        }
+
         _studentDataList.add(studentModel);
       });
     });
@@ -148,7 +162,7 @@ class _HomePageState extends State<HomePage> {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color:const Color.fromARGB(217, 249, 249, 249)),
+                color: const Color.fromARGB(217, 249, 249, 249)),
             child: TextField(
               onChanged: (searchedWord) {
                 studentFilteringOnSearch(searchedWord);
@@ -215,12 +229,11 @@ class _HomePageState extends State<HomePage> {
                     );
                   },
                   leading: CircleAvatar(
-                    radius: 50,
-                    backgroundImage:
-                        _studentDataList[index].profileImage != null
-                            ? AssetImage(_studentDataList[index].profileImage!)
-                            : null,
-                  ),
+                      radius: 50,
+                      backgroundImage: _studentDataList[index].profileimage !=
+                              null
+                          ? MemoryImage(_studentDataList[index].profileimage!)
+                          : null),
                   title: TextWidgetCommon(
                     overflow: TextOverflow.ellipsis,
                     text: _studentDataList[index].name ?? '',

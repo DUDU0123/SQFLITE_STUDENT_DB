@@ -27,10 +27,25 @@ class StudentProfilePage extends StatelessWidget {
           children: [
             TextWidgetCommon(
               text: " Full Details",
-              color: kBlack,
+              color: kGreen,
               fontSize: 23,
+              fontWeight: FontWeight.bold,
             ),
             kHeight25,
+            Center(
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: kGreen, width: 5)
+                ),
+                child: CircleAvatar(
+                    radius: 80,
+                    backgroundImage: studentModel.profileimage != null
+                        ? MemoryImage(studentModel.profileimage!)
+                        : null),
+              ),
+            ),
+            kHeight20,
             StudentDataRowWidget(
               fieldName: "Name",
               text: studentModel.name ?? '',
@@ -70,7 +85,6 @@ class StudentDataRowWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextWidgetCommon(
@@ -79,7 +93,6 @@ class StudentDataRowWidget extends StatelessWidget {
           fontWeight: FontWeight.bold,
           color: kBlack,
         ),
-        
         Padding(
           padding: const EdgeInsets.only(left: 50),
           child: TextWidgetCommon(

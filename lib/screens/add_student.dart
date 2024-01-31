@@ -32,8 +32,6 @@ class _AddStudentState extends State<AddStudent> {
   bool _standardvalidate = true;
   var _dbServicer = DbServicer();
   File? studentImage;
-  String? studentProfileImage;
-  String? base64String;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +52,7 @@ class _AddStudentState extends State<AddStudent> {
                 backgroundColor: const Color.fromARGB(255, 214, 255, 251),
                 radius: 60,
                 backgroundImage: studentImage != null
-                    ? Image.file(studentImage!).image
+                    ?FileImage(studentImage!)
                     : null,
                 child: Center(
                   child: studentImage != null
@@ -67,10 +65,6 @@ class _AddStudentState extends State<AddStudent> {
                               setState(() {
                                 studentImage = File(pickedImage.path);
                               });
-                              List<int> imageBytes =
-                                  await studentImage!.readAsBytes();
-                              base64String = base64Encode(imageBytes);
-                              // studentModel.profileImage = base64String;
                             }
                           },
                           icon: Icon(
@@ -150,14 +144,14 @@ class _AddStudentState extends State<AddStudent> {
                           stringRegExp.hasMatch(_nameController.text) &&
                           stringRegExp.hasMatch(_placeController.text)) {
                         var _student = StudentDataBaseModel();
-                        //_student.profileImage = base64String;
+                        _student.profileimage = studentImage != null ? await File(studentImage!.path).readAsBytes() : null;
                         _student.name = _nameController.text;
                         _student.age = _ageController.text;
                         _student.place = _placeController.text;
                         _student.standard = _standardController.text;
                         var result = await _dbServicer.addStudentToDB(_student);
                         Navigator.pop(context, result);
-                      }else {
+                      } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             duration: const Duration(

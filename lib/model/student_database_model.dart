@@ -1,10 +1,12 @@
+import 'dart:typed_data';
+
 class StudentDataBaseModel {
   int? id;
   String? name;
   String? age;
   String? place;
   String? standard;
-  String? profileImage;
+  Uint8List? profileimage;
   
 
   fromMap() {
@@ -14,7 +16,7 @@ class StudentDataBaseModel {
     mapping['age'] = age;
     mapping['place'] = place;
     mapping['standard'] = standard;
-    mapping['profileimage'] = profileImage;
+    mapping['profileimage'] = profileimage;
     return mapping;
   }
 }

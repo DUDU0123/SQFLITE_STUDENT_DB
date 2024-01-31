@@ -42,8 +42,6 @@ class _EditStudentProfilePageState extends State<EditStudentProfilePage> {
   }
 
   File? studentImage;
-  String? studentProfileImage;
-  String? base64String;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +61,7 @@ class _EditStudentProfilePageState extends State<EditStudentProfilePage> {
               CircleAvatar(
                 radius: 60,
                 backgroundImage: studentImage != null
-                    ? Image.file(studentImage!).image
+                    ? FileImage(studentImage!)
                     : null,
                 child: Center(
                   child: studentImage != null
@@ -76,10 +74,7 @@ class _EditStudentProfilePageState extends State<EditStudentProfilePage> {
                               setState(() {
                                 studentImage = File(pickedImage.path);
                               });
-                              List<int> imageBytes =
-                                  await studentImage!.readAsBytes();
-                              base64String = base64Encode(imageBytes);
-                              // studentModel.profileImage = base64String;
+                              
                             }
                           },
                           icon: Icon(
@@ -160,8 +155,7 @@ class _EditStudentProfilePageState extends State<EditStudentProfilePage> {
                           stringRegExp.hasMatch(_nameController.text) &&
                           stringRegExp.hasMatch(_placeController.text)) {
                         var _student = StudentDataBaseModel();
-                        _student.profileImage =
-                            widget.studentModel.profileImage;
+                        _student.profileimage = studentImage != null ? await File(studentImage!.path).readAsBytes() : null;
                         _student.id = widget.studentModel.id;
                         _student.name = _nameController.text;
                         _student.age = _ageController.text;
