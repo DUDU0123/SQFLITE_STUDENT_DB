@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
         studentModel.age = student['age'];
         studentModel.place = student['place'];
         studentModel.standard = student['standard'];
-       
+
         try {
           Uint8List? imageBytes = student['profileimage'];
 
@@ -229,11 +229,22 @@ class _HomePageState extends State<HomePage> {
                     );
                   },
                   leading: CircleAvatar(
-                      radius: 50,
-                      backgroundImage: _studentDataList[index].profileimage !=
-                              null
-                          ? MemoryImage(_studentDataList[index].profileimage!)
-                          : null),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: _studentDataList[index].profileimage != null
+                              ? MemoryImage(_studentDataList[index].profileimage!)
+                              : MemoryImage(
+                                  Uint8List(0),
+                                  
+                                ),
+                                fit: BoxFit.cover,
+                                scale: 10
+                        ),
+                      ),
+                    ),
+                  ),
                   title: TextWidgetCommon(
                     overflow: TextOverflow.ellipsis,
                     text: _studentDataList[index].name ?? '',

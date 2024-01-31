@@ -35,9 +35,8 @@ class StudentProfilePage extends StatelessWidget {
             Center(
               child: Container(
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: kGreen, width: 5)
-                ),
+                    shape: BoxShape.circle,
+                    border: Border.all(color: kGreen, width: 5)),
                 child: CircleAvatar(
                     radius: 80,
                     backgroundImage: studentModel.profileimage != null
@@ -84,24 +83,29 @@ class StudentDataRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TextWidgetCommon(
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: kWhite,
+          boxShadow: const [
+            BoxShadow(
+              offset: Offset(2, 4),
+              color: Color.fromARGB(143, 177, 177, 177),
+            )
+          ]),
+      child: ListTile(
+        leading: TextWidgetCommon(
           fontSize: 20,
           text: '$fieldName:',
           fontWeight: FontWeight.bold,
           color: kBlack,
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 50),
-          child: TextWidgetCommon(
-            text: text,
-            color: kBlack,
-            fontSize: 20,
-          ),
+        trailing: TextWidgetCommon(
+          text: text,
+          color: kBlack,
+          fontSize: 20,
         ),
-      ],
+      ),
     );
   }
 }
