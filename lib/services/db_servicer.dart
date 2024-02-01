@@ -24,7 +24,7 @@ class DbServicer{
     return await _dbFunctions.deleteDataById('studentdb', id);
   }
 
-  getOneStudentFromDbList(id) async {
-    return await _dbFunctions.getDataFromDBbyId('studentdb', id);
+  getOneStudentFromDbList(StudentDataBaseModel name) async {
+    return await _dbFunctions.getDataFromDBbyId('studentdb', name);
   }
 }

@@ -31,7 +31,13 @@ class DbFunctions {
 
   getDataFromDBbyId(table, StudentDataBaseModel student) async {
     var db = await database;
-    return await db?.query(table, where: 'id = ?', whereArgs: [student.id]);
+    var result = await db
+        ?.query(table, where: 'name LIKE ?', whereArgs: ['%${student.name}%']);
+    if (result != null && result.isNotEmpty) {
+      return result;
+    } else {
+      return null; // Return null if no records are found
+    }
   }
 
   updateOneUserInDB(table, data) async {

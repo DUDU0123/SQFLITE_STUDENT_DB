@@ -7,6 +7,14 @@ class StudentDataBaseModel {
   String? place;
   String? standard;
   Uint8List? profileimage;
+  StudentDataBaseModel({
+    this.id,
+    this.name,
+    this.age,
+    this.place,
+    this.standard,
+    this.profileimage,
+  });
   
 
   fromMap() {

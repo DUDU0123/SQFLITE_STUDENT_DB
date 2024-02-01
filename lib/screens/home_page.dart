@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:database_practice/data/db_functions.dart';
 import 'package:database_practice/model/student_database_model.dart';
 import 'package:database_practice/screens/add_student.dart';
 import 'package:database_practice/screens/common_widgets/text_widget_common.dart';
@@ -117,26 +118,45 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  //filtering function
-  void studentFilteringOnSearch(String searchedWord) {
-    List<StudentDataBaseModel> results = [];
-    if (searchedWord.isEmpty) {
+  DbFunctions dbFn = DbFunctions();
+
+  void searchStudents(String query) async {
+    var students = await _dbService.getOneStudentFromDbList(StudentDataBaseModel(name: query));
+    if(students!=null){
+      _studentDataList = <StudentDataBaseModel>[];
+    students.forEach((student) {
       setState(() {
-        getAllStudentDetails();
+        // Populate _studentDataList with search results
+        var studentModel = StudentDataBaseModel();
+        studentModel.id = student['id'];
+        studentModel.name = student['name'];
+        studentModel.age = student['age'];
+        studentModel.place = student['place'];
+        studentModel.standard = student['standard'];
+
+        try {
+          Uint8List? imageBytes = student['profileimage'];
+
+          if (imageBytes != null) {
+            studentModel.profileimage = imageBytes;
+          }
+        } catch (e) {
+          // Handle decoding error
+          print('Error decoding profile image: $e');
+        }
+
+        _studentDataList.add(studentModel);
       });
-    } else {
-      results = _studentDataList
-          .where(
-            (student) => student.name!.toLowerCase().contains(
-                  searchedWord.toLowerCase(),
-                ),
-          )
-          .toList();
-    }
-    setState(() {
-      _studentDataList = results;
     });
+    }else{
+      setState(() {
+      // Clear the _studentDataList
+      _studentDataList.clear();
+    });
+    }
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                 color: const Color.fromARGB(217, 249, 249, 249)),
             child: TextField(
               onChanged: (searchedWord) {
-                studentFilteringOnSearch(searchedWord);
+                searchStudents(searchedWord);
               },
               controller: searchValueController,
               style: TextStyle(
@@ -237,7 +257,6 @@ class _HomePageState extends State<HomePage> {
                               ? MemoryImage(_studentDataList[index].profileimage!)
                               : MemoryImage(
                                   Uint8List(0),
-                                  
                                 ),
                                 fit: BoxFit.cover,
                                 scale: 10
