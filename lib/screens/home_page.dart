@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:database_practice/data/db_functions.dart';
 import 'package:database_practice/model/student_database_model.dart';
 import 'package:database_practice/screens/add_student.dart';
@@ -121,42 +119,41 @@ class _HomePageState extends State<HomePage> {
   DbFunctions dbFn = DbFunctions();
 
   void searchStudents(String query) async {
-    var students = await _dbService.getOneStudentFromDbList(StudentDataBaseModel(name: query));
-    if(students!=null){
+    var students = await _dbService
+        .getOneStudentFromDbList(StudentDataBaseModel(name: query));
+    if (students != null) {
       _studentDataList = <StudentDataBaseModel>[];
-    students.forEach((student) {
-      setState(() {
-        // Populate _studentDataList with search results
-        var studentModel = StudentDataBaseModel();
-        studentModel.id = student['id'];
-        studentModel.name = student['name'];
-        studentModel.age = student['age'];
-        studentModel.place = student['place'];
-        studentModel.standard = student['standard'];
+      students.forEach((student) {
+        setState(() {
+          // Populate _studentDataList with search results
+          var studentModel = StudentDataBaseModel();
+          studentModel.id = student['id'];
+          studentModel.name = student['name'];
+          studentModel.age = student['age'];
+          studentModel.place = student['place'];
+          studentModel.standard = student['standard'];
 
-        try {
-          Uint8List? imageBytes = student['profileimage'];
+          try {
+            Uint8List? imageBytes = student['profileimage'];
 
-          if (imageBytes != null) {
-            studentModel.profileimage = imageBytes;
+            if (imageBytes != null) {
+              studentModel.profileimage = imageBytes;
+            }
+          } catch (e) {
+            // Handle decoding error
+            print('Error decoding profile image: $e');
           }
-        } catch (e) {
-          // Handle decoding error
-          print('Error decoding profile image: $e');
-        }
 
-        _studentDataList.add(studentModel);
+          _studentDataList.add(studentModel);
+        });
       });
-    });
-    }else{
+    } else {
       setState(() {
-      // Clear the _studentDataList
-      _studentDataList.clear();
-    });
+        // Clear the _studentDataList
+        _studentDataList.clear();
+      });
     }
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -253,14 +250,14 @@ class _HomePageState extends State<HomePage> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                          image: _studentDataList[index].profileimage != null
-                              ? MemoryImage(_studentDataList[index].profileimage!)
-                              : MemoryImage(
-                                  Uint8List(0),
-                                ),
-                                fit: BoxFit.cover,
-                                scale: 10
-                        ),
+                            image: _studentDataList[index].profileimage != null
+                                ? MemoryImage(
+                                    _studentDataList[index].profileimage!)
+                                : MemoryImage(
+                                    Uint8List(0),
+                                  ),
+                            fit: BoxFit.cover,
+                            scale: 10),
                       ),
                     ),
                   ),
@@ -289,7 +286,6 @@ class _HomePageState extends State<HomePage> {
                                   "Data Successfully Saved");
                             }
                           });
-                          ;
                         },
                         icon: Icon(
                           Icons.edit,
@@ -332,6 +328,78 @@ class _HomePageState extends State<HomePage> {
           size: 30,
           color: kWhite,
         ),
+      ),
+    );
+  }
+
+  Widget buildGrid(int index) {
+    return Container(
+      // height: 10,
+      // width: 100,
+      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+      decoration:
+          BoxDecoration(color: kGreen, borderRadius: BorderRadius.circular(10)),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircleAvatar(
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                    image: _studentDataList[index].profileimage != null
+                        ? MemoryImage(_studentDataList[index].profileimage!)
+                        : MemoryImage(
+                            Uint8List(0),
+                          ),
+                    fit: BoxFit.cover,
+                    scale: 10),
+              ),
+            ),
+          ),
+          TextWidgetCommon(
+            overflow: TextOverflow.ellipsis,
+            text: _studentDataList[index].name ?? '',
+            color: Colors.black,
+            fontSize: 20,
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context)
+                      .push(
+                    MaterialPageRoute(
+                      builder: (context) => EditStudentProfilePage(
+                          studentModel: _studentDataList[index]),
+                    ),
+                  )
+                      .then((value) {
+                    if (value != null) {
+                      getAllStudentDetails();
+                      showSnackbarAfterDataFetch("Data Successfully Saved");
+                    }
+                  });
+                  ;
+                },
+                icon: Icon(
+                  Icons.edit,
+                  color: kBlack,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  deleteAlertDialog(context, _studentDataList[index].id);
+                },
+                icon: Icon(
+                  Icons.delete_outline,
+                  color: kBlack,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
