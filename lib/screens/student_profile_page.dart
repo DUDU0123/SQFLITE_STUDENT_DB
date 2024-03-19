@@ -22,49 +22,51 @@ class StudentProfilePage extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextWidgetCommon(
-              text: " Full Details",
-              color: kGreen,
-              fontSize: 23,
-              fontWeight: FontWeight.bold,
-            ),
-            kHeight25,
-            Center(
-              child: Container(
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: kGreen, width: 5)),
-                child: CircleAvatar(
-                    radius: 80,
-                    backgroundImage: studentModel.profileimage != null
-                        ? MemoryImage(studentModel.profileimage!)
-                        : null),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextWidgetCommon(
+                text: " Full Details",
+                color: kGreen,
+                fontSize: 23,
+                fontWeight: FontWeight.bold,
               ),
-            ),
-            kHeight20,
-            StudentDataRowWidget(
-              fieldName: "Name",
-              text: studentModel.name ?? '',
-            ),
-            kHeight15,
-            StudentDataRowWidget(
-              fieldName: "Age",
-              text: studentModel.age ?? '',
-            ),
-            kHeight15,
-            StudentDataRowWidget(
-              fieldName: "Place",
-              text: studentModel.place ?? '',
-            ),
-            kHeight15,
-            StudentDataRowWidget(
-              fieldName: "Class",
-              text: studentModel.standard ?? '',
-            ),
-          ],
+              kHeight25,
+              Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: kGreen, width: 5)),
+                  child: CircleAvatar(
+                      radius: 80,
+                      backgroundImage: studentModel.profileimage != null
+                          ? MemoryImage(studentModel.profileimage!)
+                          : null),
+                ),
+              ),
+              kHeight20,
+              StudentDataRowWidget(
+                fieldName: "Name",
+                text: studentModel.name ?? '',
+              ),
+              kHeight15,
+              StudentDataRowWidget(
+                fieldName: "Age",
+                text: studentModel.age ?? '',
+              ),
+              kHeight15,
+              StudentDataRowWidget(
+                fieldName: "Place",
+                text: studentModel.place ?? '',
+              ),
+              kHeight15,
+              StudentDataRowWidget(
+                fieldName: "Class",
+                text: studentModel.standard ?? '',
+              ),
+            ],
+          ),
         ),
       ),
     );

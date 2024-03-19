@@ -98,6 +98,7 @@ class _HomePageState extends State<HomePage> {
                   getAllStudentDetails();
                   showSnackbarAfterDataFetch("Data Successfully Deleted");
                 }
+                getAllStudentDetails();
               },
               child: TextWidgetCommon(
                 text: "Delete",

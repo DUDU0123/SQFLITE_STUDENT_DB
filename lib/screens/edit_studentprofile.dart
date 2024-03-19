@@ -61,8 +61,8 @@ class _EditStudentProfilePageState extends State<EditStudentProfilePage> {
               CircleAvatar(
                 radius: 60,
                 backgroundImage: studentImage != null
-                    ? FileImage(studentImage!)
-                    : null,
+                    ? MemoryImage(studentImage!.readAsBytesSync())
+                    : MemoryImage(widget.studentModel.profileimage!),
                 child: Center(
                   child: studentImage != null
                       ? null
@@ -74,7 +74,6 @@ class _EditStudentProfilePageState extends State<EditStudentProfilePage> {
                               setState(() {
                                 studentImage = File(pickedImage.path);
                               });
-                              
                             }
                           },
                           icon: Icon(
@@ -155,7 +154,9 @@ class _EditStudentProfilePageState extends State<EditStudentProfilePage> {
                           stringRegExp.hasMatch(_nameController.text) &&
                           stringRegExp.hasMatch(_placeController.text)) {
                         var _student = StudentDataBaseModel();
-                        _student.profileimage = studentImage != null ? await File(studentImage!.path).readAsBytes() : null;
+                        _student.profileimage = studentImage != null
+                            ? await File(studentImage!.path).readAsBytes()
+                            : null;
                         _student.id = widget.studentModel.id;
                         _student.name = _nameController.text;
                         _student.age = _ageController.text;
