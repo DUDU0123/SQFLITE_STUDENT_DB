@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:database_practice/model/student_database_model.dart';
@@ -28,7 +27,7 @@ class _EditStudentProfilePageState extends State<EditStudentProfilePage> {
   bool _agevalidate = true;
   bool _placevalidate = true;
   bool _standardvalidate = true;
-  var _dbServicer = DbServicer();
+  final _dbServicer = DbServicer();
 
   @override
   void initState() {
@@ -153,17 +152,17 @@ class _EditStudentProfilePageState extends State<EditStudentProfilePage> {
                           regExp.hasMatch(_ageController.text) &&
                           stringRegExp.hasMatch(_nameController.text) &&
                           stringRegExp.hasMatch(_placeController.text)) {
-                        var _student = StudentDataBaseModel();
-                        _student.profileimage = studentImage != null
+                        var student = StudentDataBaseModel();
+                        student.profileimage = studentImage != null
                             ? await File(studentImage!.path).readAsBytes()
                             : null;
-                        _student.id = widget.studentModel.id;
-                        _student.name = _nameController.text;
-                        _student.age = _ageController.text;
-                        _student.place = _placeController.text;
-                        _student.standard = _standardController.text;
+                        student.id = widget.studentModel.id;
+                        student.name = _nameController.text;
+                        student.age = _ageController.text;
+                        student.place = _placeController.text;
+                        student.standard = _standardController.text;
                         var result =
-                            await _dbServicer.updateStudentData(_student);
+                            await _dbServicer.updateStudentData(student);
                         Navigator.pop(context, result);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(

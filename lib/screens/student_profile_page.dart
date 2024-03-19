@@ -1,4 +1,5 @@
 import 'package:database_practice/model/student_database_model.dart';
+import 'package:database_practice/screens/common_widgets/student_data_row_widget.dart';
 import 'package:database_practice/screens/common_widgets/text_widget_common.dart';
 import 'package:database_practice/utils/colors.dart';
 import 'package:database_practice/utils/height_width.dart';
@@ -26,23 +27,26 @@ class StudentProfilePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextWidgetCommon(
-                text: " Full Details",
-                color: kGreen,
-                fontSize: 23,
-                fontWeight: FontWeight.bold,
-              ),
+              // TextWidgetCommon(
+              //   text: " Full Details",
+              //   color: kGreen,
+              //   fontSize: 23,
+              //   fontWeight: FontWeight.bold,
+              // ),
               kHeight25,
               Center(
                 child: Container(
                   decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: kGreen, width: 5)),
+                    shape: BoxShape.circle,
+                    boxShadow: [BoxShadow(offset: Offset(1, 1), blurRadius: 2), BoxShadow(offset: Offset(-1, -1), blurRadius: 2)],
+                    //border: Border.all(color: kTeal, width: 5),
+                  ),
                   child: CircleAvatar(
-                      radius: 80,
-                      backgroundImage: studentModel.profileimage != null
-                          ? MemoryImage(studentModel.profileimage!)
-                          : null),
+                    radius: 80,
+                    backgroundImage: studentModel.profileimage != null
+                        ? MemoryImage(studentModel.profileimage!)
+                        : null,
+                  ),
                 ),
               ),
               kHeight20,
@@ -67,45 +71,6 @@ class StudentProfilePage extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class StudentDataRowWidget extends StatelessWidget {
-  const StudentDataRowWidget({
-    super.key,
-    required this.text,
-    required this.fieldName,
-  });
-
-  final String text;
-  final String fieldName;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: kWhite,
-          boxShadow: const [
-            BoxShadow(
-              offset: Offset(2, 4),
-              color: Color.fromARGB(143, 177, 177, 177),
-            )
-          ]),
-      child: ListTile(
-        leading: TextWidgetCommon(
-          fontSize: 20,
-          text: '$fieldName:',
-          fontWeight: FontWeight.bold,
-          color: kBlack,
-        ),
-        trailing: TextWidgetCommon(
-          text: text,
-          color: kBlack,
-          fontSize: 20,
         ),
       ),
     );

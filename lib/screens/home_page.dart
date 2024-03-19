@@ -179,8 +179,9 @@ class _HomePageState extends State<HomePage> {
             height: 50,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: const Color.fromARGB(217, 249, 249, 249)),
+              borderRadius: BorderRadius.circular(10),
+              color: Color.fromARGB(217, 195, 195, 195),
+            ),
             child: TextField(
               onChanged: (searchedWord) {
                 searchStudents(searchedWord);
@@ -194,6 +195,7 @@ class _HomePageState extends State<HomePage> {
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.only(top: 10),
                 hintText: 'Search',
+                hintStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.normal,),
                 border: OutlineInputBorder(
                   borderSide: BorderSide(
                     color: kTransparent,
@@ -235,7 +237,7 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (context, index) => Container(
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 decoration: BoxDecoration(
-                    color: kBlue.withOpacity(0.5),
+                    color:kBlackOpacity,
                     borderRadius: BorderRadius.circular(10)),
                 child: ListTile(
                   onTap: () {
