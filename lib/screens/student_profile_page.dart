@@ -36,17 +36,15 @@ class StudentProfilePage extends StatelessWidget {
               kHeight25,
               Center(
                 child: Container(
-                  decoration: BoxDecoration(
+                  decoration:const BoxDecoration(
                     shape: BoxShape.circle,
                     boxShadow: [BoxShadow(offset: Offset(1, 1), blurRadius: 2), BoxShadow(offset: Offset(-1, -1), blurRadius: 2)],
                     //border: Border.all(color: kTeal, width: 5),
                   ),
-                  child: CircleAvatar(
+                  child: studentModel.profileimage != null? CircleAvatar(
                     radius: 80,
-                    backgroundImage: studentModel.profileimage != null
-                        ? MemoryImage(studentModel.profileimage!)
-                        : null,
-                  ),
+                    backgroundImage: MemoryImage(studentModel.profileimage!),
+                  ): const CircleAvatar(radius: 80,child: Icon(Icons.person, size: 80,),),
                 ),
               ),
               kHeight20,

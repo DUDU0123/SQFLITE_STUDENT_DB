@@ -195,7 +195,10 @@ class _HomePageState extends State<HomePage> {
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.only(top: 10),
                 hintText: 'Search',
-                hintStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.normal,),
+                hintStyle: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.normal,
+                ),
                 border: OutlineInputBorder(
                   borderSide: BorderSide(
                     color: kTransparent,
@@ -237,7 +240,7 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (context, index) => Container(
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 decoration: BoxDecoration(
-                    color:kBlackOpacity,
+                    color: kBlackOpacity,
                     borderRadius: BorderRadius.circular(10)),
                 child: ListTile(
                   onTap: () {
@@ -248,22 +251,32 @@ class _HomePageState extends State<HomePage> {
                       ),
                     );
                   },
-                  leading: CircleAvatar(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                            image: _studentDataList[index].profileimage != null
-                                ? MemoryImage(
-                                    _studentDataList[index].profileimage!)
-                                : MemoryImage(
-                                    Uint8List(0),
-                                  ),
-                            fit: BoxFit.cover,
-                            scale: 10),
-                      ),
-                    ),
-                  ),
+                  leading: _studentDataList[index].profileimage != null
+                      ? CircleAvatar(
+                          backgroundImage: MemoryImage(
+                              _studentDataList[index].profileimage!),
+                        )
+                      : const CircleAvatar(
+                          child: Icon(
+                            Icons.person,
+                            size: 30,
+                          ),
+                          // child
+                          //  Container(
+                          //   decoration: BoxDecoration(
+                          //     shape: BoxShape.circle,
+                          //     image: DecorationImage(
+                          //         image: _studentDataList[index].profileimage != null
+                          // ? MemoryImage(
+                          //     _studentDataList[index].profileimage!)
+                          //             : MemoryImage(
+                          //                 Uint8List(0),
+                          //               ),
+                          //         fit: BoxFit.cover,
+                          //         scale: 10),
+                          //   ),
+                          // ),
+                        ),
                   title: TextWidgetCommon(
                     overflow: TextOverflow.ellipsis,
                     text: _studentDataList[index].name ?? '',
@@ -316,7 +329,7 @@ class _HomePageState extends State<HomePage> {
           Navigator.of(context)
               .push(
             MaterialPageRoute(
-              builder: (context) => AddStudent(),
+              builder: (context) => const AddStudent(),
             ),
           )
               .then((value) {
@@ -339,7 +352,7 @@ class _HomePageState extends State<HomePage> {
     return Container(
       // height: 10,
       // width: 100,
-      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
       decoration:
           BoxDecoration(color: kGreen, borderRadius: BorderRadius.circular(10)),
       child: Column(

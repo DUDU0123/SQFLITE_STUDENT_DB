@@ -57,32 +57,54 @@ class _EditStudentProfilePageState extends State<EditStudentProfilePage> {
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
           child: Column(
             children: [
-              CircleAvatar(
-                radius: 60,
-                backgroundImage: studentImage != null
-                    ? MemoryImage(studentImage!.readAsBytesSync())
-                    : MemoryImage(widget.studentModel.profileimage!),
-                child: Center(
-                  child: studentImage != null
-                      ? null
-                      : IconButton(
-                          onPressed: () async {
-                            final pickedImage = await ImagePicker()
-                                .pickImage(source: ImageSource.gallery);
-                            if (pickedImage != null) {
-                              setState(() {
-                                studentImage = File(pickedImage.path);
-                              });
-                            }
-                          },
-                          icon: Icon(
-                            Icons.camera_alt_outlined,
-                            size: 35,
-                            color: kBlack,
-                          ),
+              widget.studentModel.profileimage != null || studentImage!=null
+                  ? CircleAvatar(
+                      radius: 60,
+                      backgroundImage: studentImage != null
+                          ? MemoryImage(studentImage!.readAsBytesSync())
+                          : MemoryImage(widget.studentModel.profileimage!),
+                      child: Center(
+                        child: studentImage != null
+                            ? null
+                            : IconButton(
+                                onPressed: () async {
+                                  final pickedImage = await ImagePicker()
+                                      .pickImage(source: ImageSource.gallery);
+                                  if (pickedImage != null) {
+                                    setState(() {
+                                      studentImage = File(pickedImage.path);
+                                    });
+                                  }
+                                },
+                                icon: Icon(
+                                  Icons.camera_alt_outlined,
+                                  size: 35,
+                                  color: kBlack,
+                                ),
+                              ),
+                      ),
+                    )
+                  : CircleAvatar(
+                      radius: 80,
+                      backgroundImage: const AssetImage(
+                        "assets/person.png",
+                      ),
+                      child: IconButton(
+                        onPressed: () async {
+                          final pickedImage = await ImagePicker()
+                              .pickImage(source: ImageSource.gallery);
+                          if (pickedImage != null) {
+                            setState(() {
+                              studentImage = File(pickedImage.path);
+                            });
+                          }
+                        },
+                        icon: Icon(
+                          Icons.camera_alt_outlined,
+                          size: 35,
+                          color: kWhite,
                         ),
-                ),
-              ),
+                      )),
               TextWidgetCommon(
                 text: "Edit Student Details",
                 color: kBlack,
@@ -154,8 +176,8 @@ class _EditStudentProfilePageState extends State<EditStudentProfilePage> {
                           stringRegExp.hasMatch(_placeController.text)) {
                         var student = StudentDataBaseModel();
                         student.profileimage = studentImage != null
-                            ? await File(studentImage!.path).readAsBytes()
-                            : null;
+                            ? studentImage!.readAsBytesSync()
+                            : widget.studentModel.profileimage;
                         student.id = widget.studentModel.id;
                         student.name = _nameController.text;
                         student.age = _ageController.text;
